@@ -17,6 +17,7 @@ import java.util.TreeSet;
 /**
  * This class contains some of the utility functions previously found in DiscoveryClient, but should be elsewhere.
  * It *does not yet* clean up the moved code.
+ * @date 20200413
  */
 public class EndpointUtils {
     private static final Logger logger = LoggerFactory.getLogger(EndpointUtils.class);

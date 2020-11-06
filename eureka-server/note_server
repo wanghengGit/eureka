@@ -1,0 +1,12 @@
+Eureka Server：注册中心服务端
+
+注册中心服务端主要对外提供了三个功能：
+
+服务注册
+服务提供者启动时，会通过 Eureka Client 向 Eureka Server 注册信息，Eureka Server 会存储该服务的信息，Eureka Server 内部有二层缓存机制来维护整个注册表
+
+提供注册表
+服务消费者在调用服务时，如果 Eureka Client 没有缓存注册表的话，会从 Eureka Server 获取最新的注册表
+
+同步状态
+Eureka Client 通过注册、心跳机制和 Eureka Server 同步当前客户端的状态

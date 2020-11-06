@@ -50,6 +50,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  *
  * @author Karthik Ranganathan, Greg Kim
+ * @date 20200413
  */
 @ProvidedBy(EurekaConfigBasedInstanceInfoProvider.class)
 @Serializer("com.netflix.discovery.converters.EntityBodyConverter")

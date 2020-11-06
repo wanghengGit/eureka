@@ -109,7 +109,9 @@ import com.netflix.servo.monitor.Stopwatch;
  *
  * @author Karthik Ranganathan, Greg Kim
  * @author Spencer Gibb
- *
+ * @date 20200413
+ * 该类包含了Eureka Client向Eureka Server的相关方法。其中DiscoveryClient实现了EurekaClient接口，
+ * 并且它是一个单例模式，而EurekaClient继承了LookupService接口
  */
 @Singleton
 public class DiscoveryClient implements EurekaClient {
@@ -849,6 +851,7 @@ public class DiscoveryClient implements EurekaClient {
 
     /**
      * Register with the eureka service by making the appropriate REST call.
+     * 该方法是通过Http请求向Eureka Client注册
      */
     boolean register() throws Throwable {
         logger.info(PREFIX + "{}: registering service...", appPathIdentifier);
@@ -867,6 +870,7 @@ public class DiscoveryClient implements EurekaClient {
 
     /**
      * Renew with the eureka service by making the appropriate REST call
+     * Renew服务续约
      */
     boolean renew() {
         EurekaHttpResponse<InstanceInfo> httpResponse;
@@ -912,27 +916,30 @@ public class DiscoveryClient implements EurekaClient {
     @PreDestroy
     @Override
     public synchronized void shutdown() {
+        //synchronized
         if (isShutdown.compareAndSet(false, true)) {
             logger.info("Shutting down DiscoveryClient ...");
-
+            //原子操作，确保只会执行一次
             if (statusChangeListener != null && applicationInfoManager != null) {
+                //注册状态监听器
                 applicationInfoManager.unregisterStatusChangeListener(statusChangeListener.getId());
             }
-
+            //取消定时任务
             cancelScheduledTasks();
 
             // If APPINFO was registered
             if (applicationInfoManager != null
                     && clientConfig.shouldRegisterWithEureka()
                     && clientConfig.shouldUnregisterOnShutdown()) {
+                //服务下线
                 applicationInfoManager.setInstanceStatus(InstanceStatus.DOWN);
                 unregister();
             }
-
+            //关闭jersy客户端
             if (eurekaTransport != null) {
                 eurekaTransport.shutdown();
             }
-
+            //关闭相关monitor
             heartbeatStalenessMonitor.shutdown();
             registryStalenessMonitor.shutdown();
 
@@ -1275,6 +1282,7 @@ public class DiscoveryClient implements EurekaClient {
 
     /**
      * Initializes all scheduled tasks.
+     * 在initScheduledTasks方法中，做了三个操作，向Eureka Server注册服务，并且在条件满足的情况下，创建服务获取和服务续约两个定时任务
      */
     private void initScheduledTasks() {
         if (clientConfig.shouldFetchRegistry()) {
@@ -1418,7 +1426,9 @@ public class DiscoveryClient implements EurekaClient {
      * isDirty flag on the instanceInfo is set to true
      */
     void refreshInstanceInfo() {
+        //刷新服务实例信息
         applicationInfoManager.refreshDataCenterInfoIfRequired();
+        //更新租约信息
         applicationInfoManager.refreshLeaseInfoIfRequired();
 
         InstanceStatus status;

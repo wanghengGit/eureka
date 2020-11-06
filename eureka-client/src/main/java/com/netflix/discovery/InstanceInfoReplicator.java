@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *   on-demand update).
  *
  *   @author dliu
+ * @date 20200418
  */
 class InstanceInfoReplicator implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(InstanceInfoReplicator.class);
@@ -85,6 +86,7 @@ class InstanceInfoReplicator implements Runnable {
     }
 
     public boolean onDemandUpdate() {
+        //控制流量，当超过限制时，不能进行按需更新
         if (rateLimiter.acquire(burstSize, allowedRatePerMinute)) {
             if (!scheduler.isShutdown()) {
                 scheduler.submit(new Runnable() {

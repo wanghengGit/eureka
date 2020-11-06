@@ -28,6 +28,7 @@ import static com.netflix.discovery.shared.transport.EurekaHttpResponse.anEureka
 
 /**
  * @author Tomasz Bak
+ * @date 20200609
  */
 public abstract class AbstractJerseyEurekaHttpClient implements EurekaHttpClient {
 

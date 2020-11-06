@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * <em>eureka-client.properties</em> is assumed as the default.
  *
  * @author Karthik Ranganathan
- *
+ * @date 20200414
  */
 @Deprecated
 public class DiscoveryManager {

@@ -62,7 +62,8 @@ import org.slf4j.LoggerFactory;
  * </p>
  *
  * @author Karthik Ranganathan, Greg Kim, David Liu
- *
+ * @date 20200413
+ * BootStrapContext具有最先初始化的权限
  */
 public class EurekaBootStrap implements ServletContextListener {
     private static final Logger logger = LoggerFactory.getLogger(EurekaBootStrap.class);
@@ -106,6 +107,8 @@ public class EurekaBootStrap implements ServletContextListener {
      *
      * @see
      * javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
+     * 在contextInitialized中，会初始化EurekaEnvironment和EurekaServerContext，进入EurekaServerContext方法，可以看到，
+     * 在方法中，新建了几个类，PeerAwareInstanceRegistryImpl和PeerEurekaNodes等
      */
     @Override
     public void contextInitialized(ServletContextEvent event) {

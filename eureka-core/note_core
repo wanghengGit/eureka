@@ -1,0 +1,9 @@
+Eureka Server方面的源码，主要代码都在com.netflix.eureka:eureka-core-1.4.6.jar包下。
+先看下这个包下的EurekaBootStrap类，这个类实现了ServletContextListener接口，
+在 Servlet API 中有一个 ServletContextListener 接口，它能够监听 ServletContext 对象的生命周期，
+当Servlet 容器启动或终止Web 应用时，会触发ServletContextEvent 事件，该事件由ServletContextListener 来处理。
+在 ServletContextListener 接口中定义了处理ServletContextEvent 事件的两个方法：contextInitialized和contextDestroyed。
+EurekaBootStrap类中实现了这两个方法，在容器初始化的时候，就会执行这个类中的方法
+
+Eureka Server会接收Eureka Client发送的REST请求，进行服务的注册，续约，下线等操作，
+这部分代码在com.netflix.eureka:eureka-core-1.4.6.jar包的resources目录下

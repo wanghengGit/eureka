@@ -4,6 +4,7 @@ package com.netflix.appinfo;
  * This provides a more granular healthcheck contract than the existing {@link HealthCheckCallback}
  *
  * @author Nitesh Kant
+ * @date 20200609
  */
 public interface HealthCheckHandler {
 

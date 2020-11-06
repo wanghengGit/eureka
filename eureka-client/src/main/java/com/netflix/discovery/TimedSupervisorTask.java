@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
  * Wrapped subtasks must be thread safe.
  *
  * @author David Qiang Liu
+ * @date 20200609
  */
 public class TimedSupervisorTask extends TimerTask {
     private static final Logger logger = LoggerFactory.getLogger(TimedSupervisorTask.class);

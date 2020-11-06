@@ -29,6 +29,7 @@ import com.netflix.eureka.registry.AbstractInstanceRegistry;
  * {@link T} and {@link LeaseManager}.
  *
  * @author Karthik Ranganathan, Greg Kim
+ * @date 20200413
  */
 public class Lease<T> {
 

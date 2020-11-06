@@ -54,7 +54,7 @@ import static com.netflix.discovery.PropertyBasedClientConfigConstants.*;
  * </p>
  *
  * @author Karthik Ranganathan
- *
+ * @date 20200418
  */
 @Singleton
 @ProvidedBy(DefaultEurekaClientConfigProvider.class)
@@ -110,6 +110,10 @@ public class DefaultEurekaClientConfig implements EurekaClientConfig {
                 namespace + REGISTRATION_REPLICATION_INTERVAL_KEY, 30).get();
     }
 
+    /**
+     * 默认的延迟时间为40秒
+     * @return
+     */
     @Override
     public int getInitialInstanceInfoReplicationIntervalSeconds() {
         return configInstance.getIntProperty(

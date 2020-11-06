@@ -86,7 +86,7 @@ import javax.inject.Singleton;
  * </p>
  *
  * @author Karthik Ranganathan, Greg Kim
- *
+ * @date 20200418
  */
 @Singleton
 public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry implements PeerAwareInstanceRegistry {
@@ -393,6 +393,7 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry impl
      * @param isReplication
      *            true if this is a replication event from other replica nodes,
      *            false otherwise.
+     *            PeerAwareInstanceRegistryImpl的register()方法实现了服务的注册，并且向其他Eureka Server的Peer节点同步了该注册信息
      */
     @Override
     public void register(final InstanceInfo info, final boolean isReplication) {

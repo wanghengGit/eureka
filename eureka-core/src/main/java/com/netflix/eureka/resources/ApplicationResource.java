@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  * {@link com.netflix.discovery.shared.Application}.
  *
  * @author Karthik Ranganathan, Greg Kim
- *
+ * @date 20200413
  */
 @Produces({"application/xml", "application/json"})
 public class ApplicationResource {
@@ -139,6 +139,9 @@ public class ApplicationResource {
      * @param isReplication
      *            a header parameter containing information whether this is
      *            replicated from other nodes.
+     * 接收注册服务请求
+     * 这个方法接收一个InstanceInfo info参数，这个参数就是要注册的Eureka Client节点的信息，
+     * 在对这个InstanceInfo信息进行了一连串的校验之后，会调用registry.register(info, “true”.equals(isReplication))这个方法，进行服务注册
      */
     @POST
     @Consumes({"application/json", "application/xml"})

@@ -71,12 +71,25 @@ import static com.netflix.eureka.util.EurekaMonitors.*;
  * </p>
  *
  * @author Karthik Ranganathan
- *
+ * @date 20200413
+ * 内存注册表
  */
 public abstract class AbstractInstanceRegistry implements InstanceRegistry {
     private static final Logger logger = LoggerFactory.getLogger(AbstractInstanceRegistry.class);
 
     private static final String[] EMPTY_STR_ARRAY = new String[0];
+    /**
+     * registry的数据结构
+     * 首先，这个ConcurrentHashMap的key就是服务名称，比如“xxx-service”，就是一个服务名称。
+     * value则代表了一个服务的多个服务实例。
+     * 举例：比如“xxx-service”是可以有3个服务实例的，每个服务实例部署在一台机器上
+     *
+     * Map<String, Lease<InstanceInfo>>
+     * 这个Map的key就是服务实例的id
+     * value是一个叫做Lease的类，它的泛型是一个叫做InstanceInfo的东东。
+     * InstanceInfo，我们见名知义，这个InstanceInfo就代表了服务实例的具体信息，比如机器的ip地址、hostname以及端口号。
+     * Lease，里面会维护每个服务最近一次发送心跳的时间
+     */
     private final ConcurrentHashMap<String, Map<String, Lease<InstanceInfo>>> registry
             = new ConcurrentHashMap<String, Map<String, Lease<InstanceInfo>>>();
     protected Map<String, RemoteRegionRegistry> regionNameVSRemoteRegistry = new HashMap<String, RemoteRegionRegistry>();

@@ -47,7 +47,11 @@ import org.slf4j.LoggerFactory;
  * {@link com.netflix.discovery.shared.Application}.
  *
  * @author Karthik Ranganathan, Greg Kim
+ * @author kit
  * @date 20200413
+ * 上文我们说到，eureka是使用jersey来对外提供restful风格的rpc调用的。我们得找到注册服务的Resource（对应springmvc的controller）
+ *
+ * ApplicationResource类中的addInstance方法将作为服务端注册服务的入口
  */
 @Produces({"application/xml", "application/json"})
 public class ApplicationResource {
@@ -139,6 +143,7 @@ public class ApplicationResource {
      * @param isReplication
      *            a header parameter containing information whether this is
      *            replicated from other nodes.
+     * ApplicationResource类中的addInstance方法将作为服务端注册服务的入口
      * 接收注册服务请求
      * 这个方法接收一个InstanceInfo info参数，这个参数就是要注册的Eureka Client节点的信息，
      * 在对这个InstanceInfo信息进行了一连串的校验之后，会调用registry.register(info, “true”.equals(isReplication))这个方法，进行服务注册

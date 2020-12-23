@@ -1,0 +1,8 @@
+
+
+
+获取服务信息列表其实就是从registry当中获取Applications，然后做一次序列化，最后通过http响应回去。总体来说还是比较简单的
+
+eureka Server会将register、cancel、heartbeat等操作从一个节点同步发送到其它节点，从而实现了复制的功能。
+eureka和zookeeper不一样，它是遵循ap的，所以采用了最终一致性，并没有像zookeeper一样选择强一致。
+eureka Server之间的维持最终一致性的细节点还是很多的，比如失败重试、超时、心跳、实例的版本号、同一个节点的锁控制等等。有兴趣的话可以详细了解它。

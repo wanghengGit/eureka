@@ -130,11 +130,14 @@ public class PeerEurekaNode {
      *            the instance information {@link InstanceInfo} of any instance
      *            that is send to this instance.
      * @throws Exception
+     * 跟进register方法，复制实例信息被构造成了一个任务丢给了batchingDispatcher去异步执行，如果失败将会重试。
      */
     public void register(final InstanceInfo info) throws Exception {
         long expiryTime = System.currentTimeMillis() + getLeaseRenewalOf(info);
+        // 异步执行任务
         batchingDispatcher.process(
                 taskId("register", info),
+                // 构造了一个复制实例信息的任务
                 new InstanceReplicationTask(targetHost, Action.Register, info, null, true) {
                     public EurekaHttpResponse<Void> execute() {
                         return replicationClient.register(info);

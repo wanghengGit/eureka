@@ -202,6 +202,7 @@ public abstract class AbstractInstanceRegistry implements InstanceRegistry {
      * Registers a new instance with a given duration.
      *
      * @see com.netflix.eureka.lease.LeaseManager#register(java.lang.Object, int, boolean)
+     * 看起来比较简单，其实就是将InstanceInfo给添加到了registry集合当中。我们重点关注一下registry的存储结构
      */
     public void register(InstanceInfo registrant, int leaseDuration, boolean isReplication) {
         try {

@@ -25,6 +25,7 @@ import java.util.List;
 
 /**
  * @author Tomasz Bak
+ * @author kit
  * @date 20200413
  */
 public interface PeerAwareInstanceRegistry extends InstanceRegistry {

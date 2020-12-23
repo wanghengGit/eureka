@@ -49,6 +49,13 @@ import com.netflix.eureka.util.EurekaMonitors;
  * {@link com.netflix.discovery.shared.Applications}.
  *
  * @author Karthik Ranganathan, Greg Kim
+ * @author kit
+ * @date 20201106
+ *eureka服务端维护了一个服务信息的列表，服务端节点之间相互复制服务信息。而作为eureka的客户端将会从eureka服务端请求这个服务信息列表，选择对应的实例。本文就来看看eureka服务端对客户端提供的获取服务信息列表的http接口。
+ *
+ * eureka服务端基于jersey来提供http服务调用，所以我们先找到它的Resource。
+ *
+ * ApplicationsResource
  *
  */
 @Path("/{version}/apps")

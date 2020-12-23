@@ -393,7 +393,14 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry impl
      * @param isReplication
      *            true if this is a replication event from other replica nodes,
      *            false otherwise.
-     *            PeerAwareInstanceRegistryImpl的register()方法实现了服务的注册，并且向其他Eureka Server的Peer节点同步了该注册信息
+     *  register方法主要做了两件事
+     *
+     * 1）注册实例信息
+     *
+     * 2）复制到其它节点
+     *
+     * 我们关注注册实例，跟进super.register方法
+     *  PeerAwareInstanceRegistryImpl的register()方法实现了服务的注册，并且向其他Eureka Server的Peer节点同步了该注册信息
      */
     @Override
     public void register(final InstanceInfo info, final boolean isReplication) {
@@ -402,6 +409,8 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry impl
             leaseDuration = info.getLeaseInfo().getDurationInSecs();
         }
         super.register(info, leaseDuration, isReplication);
+        // 复制到其它节点
+        //replicateToPeers担负了复制的功能
         replicateToPeers(Action.Register, info.getAppName(), info.getId(), info, null, isReplication);
     }
 
@@ -607,7 +616,7 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry impl
     /**
      * Replicates all eureka actions to peer eureka nodes except for replication
      * traffic to this node.
-     *
+     * replicateToPeers担负了复制的功能
      */
     private void replicateToPeers(Action action, String appName, String id,
                                   InstanceInfo info /* optional */,
@@ -618,15 +627,18 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry impl
                 numberOfReplicationsLastMin.increment();
             }
             // If it is a replication already, do not replicate again as this will create a poison replication
+            // 如果本次register操作本身就是复制，就不再复制到其它节点了
             if (peerEurekaNodes == Collections.EMPTY_LIST || isReplication) {
                 return;
             }
-
+            // 遍历左右节点
             for (final PeerEurekaNode node : peerEurekaNodes.getPeerEurekaNodes()) {
                 // If the url represents this host, do not replicate to yourself.
+                // 如果是当前节点，直接跳过
                 if (peerEurekaNodes.isThisMyUrl(node.getServiceUrl())) {
                     continue;
                 }
+                // 复制操作触发
                 replicateInstanceActionsToPeers(action, appName, id, info, newStatus, node);
             }
         } finally {
@@ -637,7 +649,7 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry impl
     /**
      * Replicates all instance changes to peer eureka nodes except for
      * replication traffic to this node.
-     *
+     *跟进replicateInstanceActionsToPeers，可以看到除了register还有一些其它操作一样是需要同步到其它节点的。这里我们只关注register操作
      */
     private void replicateInstanceActionsToPeers(Action action, String appName,
                                                  String id, InstanceInfo info, InstanceStatus newStatus,

@@ -5,6 +5,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author David Liu
+ * @author kit
+ * @date 20201106
  */
 public interface ResponseCache {
 

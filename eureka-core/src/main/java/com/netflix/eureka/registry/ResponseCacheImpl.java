@@ -72,6 +72,8 @@ import org.slf4j.LoggerFactory;
  * </p>
  *
  * @author Karthik Ranganathan, Greg Kim
+ * @author kit
+ * @date 20201106
  */
 public class ResponseCacheImpl implements ResponseCache {
 
@@ -127,6 +129,7 @@ public class ResponseCacheImpl implements ResponseCache {
         this.registry = registry;
 
         long responseCacheUpdateIntervalMs = serverConfig.getResponseCacheUpdateIntervalMs();
+        //构造ReadWriteCacheMap
         this.readWriteCacheMap =
                 CacheBuilder.newBuilder().initialCapacity(serverConfig.getInitialCapacityOfResponseCache())
                         .expireAfterWrite(serverConfig.getResponseCacheAutoExpirationInSeconds(), TimeUnit.SECONDS)
@@ -371,6 +374,7 @@ public class ResponseCacheImpl implements ResponseCache {
 
     /**
      * Generate pay load with both JSON and XML formats for all applications.
+     * 最后，我们跟进getPayLoad方法，看看这些服务列表信息是怎么被序列号成payload的
      */
     private String getPayLoad(Key key, Applications apps) {
         EncoderWrapper encoderWrapper = serverCodecs.getEncoder(key.getType(), key.getEurekaAccept());
@@ -404,8 +408,9 @@ public class ResponseCacheImpl implements ResponseCache {
         }
     }
 
-    /*
+    /**
      * Generate pay load for the given key.
+     * 从这里可以看出，调用ReadWriteCacheMap的get方法，将会触发这里的generatePayload方法
      */
     private Value generatePayload(Key key) {
         Stopwatch tracer = null;
@@ -414,13 +419,14 @@ public class ResponseCacheImpl implements ResponseCache {
             switch (key.getEntityType()) {
                 case Application:
                     boolean isRemoteRegionRequested = key.hasRegions();
-
+                    // 获取所有Application
                     if (ALL_APPS.equals(key.getName())) {
                         if (isRemoteRegionRequested) {
                             tracer = serializeAllAppsWithRemoteRegionTimer.start();
                             payload = getPayLoad(key, registry.getApplicationsFromMultipleRegions(key.getRegions()));
                         } else {
                             tracer = serializeAllAppsTimer.start();
+                            // 获取某个Application
                             payload = getPayLoad(key, registry.getApplications());
                         }
                     } else if (ALL_APPS_DELTA.equals(key.getName())) {
